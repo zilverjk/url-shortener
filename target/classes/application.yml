@@ -10,6 +10,8 @@ spring:
     schema-action: CREATE_IF_NOT_EXISTS
     local-datacenter: datacenter1
     contact-points: localhost
+    entity-base-package: com.urlshortener.entity
+    naming-strategy: SNAKE_CASE
     port: 9042
     driver:
       basic:

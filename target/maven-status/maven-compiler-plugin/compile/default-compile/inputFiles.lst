@@ -4,4 +4,6 @@
 /Users/andre/Documents/personal/java/url-shortener/src/main/java/com/urlshortener/repository/UrlStatsRepository.java
 /Users/andre/Documents/personal/java/url-shortener/src/main/java/com/urlshortener/entity/Url.java
 /Users/andre/Documents/personal/java/url-shortener/src/main/java/com/urlshortener/entity/UrlStats.java
+/Users/andre/Documents/personal/java/url-shortener/src/main/java/com/urlshortener/dto/UrlRequest.java
+/Users/andre/Documents/personal/java/url-shortener/src/main/java/com/urlshortener/dto/UrlResponse.java
 /Users/andre/Documents/personal/java/url-shortener/src/main/java/com/urlshortener/service/UrlShortenerService.java

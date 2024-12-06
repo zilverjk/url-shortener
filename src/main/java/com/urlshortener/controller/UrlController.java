@@ -1,7 +1,12 @@
 package com.urlshortener.controller;
 
+import com.urlshortener.dto.UrlRequest;
+import com.urlshortener.dto.UrlResponse;
 import com.urlshortener.service.UrlShortenerService;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,21 +26,42 @@ public class UrlController {
   }
 
   @PostMapping("/shorten")
-  public ResponseEntity<String> shortenUrl(@RequestBody String longUrl) {
-    String shortUrl = this.urlShortenerService.buildShorUrl(longUrl);
+  public ResponseEntity<UrlResponse> shortenUrl(@RequestBody UrlRequest request) {
+    String url = request.getLongUrl().trim();
+    UrlResponse response = new UrlResponse();
 
-    return ResponseEntity.ok(shortUrl);
+    if (url.isEmpty()) {
+      response.setMessage("A valid URL is required");
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    if (!url.matches("^(http|https)://.*")) {
+      response.setMessage("Invalid URL format");
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    String shortUrl = this.urlShortenerService.buildShorUrl(request.getLongUrl().trim());
+
+    response.setMessage("URL shortened successfully");
+    response.setShortUrl(shortUrl);
+
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("/{shortUrl}")
-  public ResponseEntity<String> redirectToLongUrl(@PathVariable String shortUrl) {
+  public ResponseEntity<UrlResponse> redirectToLongUrl(@PathVariable String shortUrl) {
     String longUrl = this.urlShortenerService.getLongUrl(shortUrl);
 
     if (longUrl == null) {
       return ResponseEntity.notFound().build();
     }
 
-    return ResponseEntity.ok(longUrl);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setLocation(URI.create(longUrl.trim()));
+
+    return new ResponseEntity<>(headers, HttpStatus.FOUND);
   }
 
   @GetMapping("/{shortUrl}/stats")

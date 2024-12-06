@@ -44,10 +44,7 @@ public class UrlShortenerService {
       url.setCreatedAt(LocalDateTime.now());
       this.urlRepository.save(url);
 
-      UrlStats urlStats = new UrlStats();
-      urlStats.setShortUrl(shortUrl);
-      urlStats.setClicks(0L); // La L hace referencia a un long, que es un int de 64 bits
-      this.urlStatsRepository.save(urlStats);
+      this.urlStatsRepository.updateClicks(shortUrl, 0L); // La L hace referencia a long de 64 bits
 
       redisTemplate.opsForValue().set(shortUrl, longUrl, CACHE_TTL);
 
