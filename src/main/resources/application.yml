@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: url-shortener-service
+  data:
+    redis:
+      host: localhost
+      port: 6380
+  cassandra:
+    keyspace-name: urlshortener
+    schema-action: CREATE_IF_NOT_EXISTS
+    local-datacenter: datacenter1
+    contact-points: localhost
+    port: 9042
+    driver:
+      basic:
+        load-balancing-policy:
+          local-datacenter: datacenter1
+      advanced:
+        connection:
+          init-query-timeout: 10s
+        control-connection:
+          timeout: 10s
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        register: true
+        instance-id: ${spring.application.name}:${random.value}
+server:
+  port: 8080
+
