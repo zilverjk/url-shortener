@@ -29,6 +29,21 @@ spring:
       discovery:
         register: true
         instance-id: ${spring.application.name}:${random.value}
+        health-check-path: /actuator/health
+        health-check-interval: 15s
+        prefer-ip-address: true
+        tags:
+          - url-shortener
+          - service
+          - spring-boot
+        config:
+          import: optional:consul
 server:
   port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
 
